@@ -329,7 +329,11 @@ func (schema *Schema) ParseField(fieldStruct reflect.StructField) *Field {
 	if field.Size == 0 {
 		switch reflect.Indirect(fieldValue).Kind() {
 		case reflect.Int, reflect.Int64, reflect.Uint, reflect.Uint64, reflect.Float64:
-			field.Size = 64
+			if field.GORMDataType == "int" || field.GORMDataType == "uint" {
+				field.Size = 32
+			}else {
+				field.Size = 64
+			}
 		case reflect.Int8, reflect.Uint8:
 			field.Size = 8
 		case reflect.Int16, reflect.Uint16:
